@@ -21,6 +21,7 @@ from config import ENDPOINT
 key = Crypto.Random.get_random_bytes(32)
 uid = str(uuid.uuid4())
 
+
 def encrypt(file):
     global key
     f = open(file, 'rb')
@@ -50,7 +51,8 @@ def send():
     global key
     global uid
     #print(key)
-    f = open('../Server/database', 'w+')
+
+    # f = open('../Server/database', 'w+')
 
     RSA_key = RSA.import_key(open("./pub.pem").read())
     session_key = Crypto.Random.get_random_bytes(16)
@@ -63,7 +65,7 @@ def send():
     cipher_aes = AES.new(session_key, AES.MODE_EAX)
     ciphertext, tag = cipher_aes.encrypt_and_digest(key)
 
-    f.write(codecs.encode(pickle.dumps([x for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]), "base64").decode())
+    # f.write(codecs.encode(pickle.dumps([x for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]), "base64").decode())
 
     req = request.Request(ENDPOINT+'/add', headers={
         'Content-Type': 'application/json'
