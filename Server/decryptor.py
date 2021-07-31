@@ -1,5 +1,5 @@
 import codecs
-import codecs
+import json
 import os
 import pickle
 from os import walk
@@ -10,17 +10,16 @@ from Crypto.PublicKey import RSA
 
 
 def decrypt(file):
-    # fake
-    data = pickle.loads(codecs.decode(open('./database', 'rb').read(), "base64"))
+    """data = pickle.loads(codecs.decode(open('./database', 'rb').read(), "base64"))
     private_key = RSA.import_key(open("priv.pem").read())
     enc_session_key, nonce, tag, ciphertext = data
-    # Decrypt the session key with the private RSA key
     cipher_rsa = PKCS1_OAEP.new(private_key)
     session_key = cipher_rsa.decrypt(enc_session_key)
-    # Decrypt the data with the AES session key
     cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
-    key = cipher_aes.decrypt_and_verify(ciphertext, tag)
-    #print(key)
+    key = cipher_aes.decrypt_and_verify(ciphertext, tag)"""
+
+    with open('key.json','r') as f:
+        key = codecs.decode((json.load(f)['key']).encode('utf-8'), "base64")
 
     base = os.path.splitext(file)[0]
 

